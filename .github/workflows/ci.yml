@@ -1,6 +1,8 @@
 # Builds the site and runs Lighthouse on every push and pull request
 # (including Dependabot's), so an update that breaks the build or drops a
-# score below 95 shows up before it is merged.
+# score shows up before it is merged. Thresholds in lighthouserc.json:
+# accessibility, best practices and SEO at 95; performance at 90, since
+# shared CI runners measure slower and noisier than a real device.
 name: CI
 
 on:
