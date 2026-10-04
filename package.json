@@ -1,0 +1,21 @@
+{
+  "name": "template-astro-cafe",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Tern & Tide — a fictional café website built with Astro. An Ikasu sample site.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.5",
+    "tailwindcss": "^4.3.3"
+  }
+}

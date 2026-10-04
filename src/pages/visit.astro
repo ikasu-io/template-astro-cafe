@@ -1,0 +1,75 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Img from '../components/Img.astro';
+import HarbourMap from '../components/HarbourMap.astro';
+import HoursTable from '../components/HoursTable.astro';
+import OpenBadge from '../components/OpenBadge.astro';
+import { getSite } from '../lib/site';
+import { cafeJsonLd } from '../lib/jsonld';
+
+const site = await getSite();
+const page = (await getEntry('pages', 'visit'))!;
+const { Content } = await render(page);
+const { title, description, image, faq = [] } = page.data;
+const tel = site.phone.replace(/\s/g, '');
+---
+
+<Base title={title} description={description} image={image} jsonLd={cafeJsonLd(site, Astro.site!)}>
+  <section class="relative isolate overflow-hidden text-foam">
+    <Img name={image} sizes="100vw" priority class="absolute inset-0 -z-10 size-full object-cover" />
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-ink/80 to-ink/20"></div>
+    <div class="container-page pt-32 pb-14 sm:pt-44">
+      <OpenBadge />
+      <h1 class="mt-5 text-5xl sm:text-7xl">Come and see us</h1>
+      <p class="mt-4 text-xl text-foam/90">{site.address.street}, {site.address.town}</p>
+    </div>
+  </section>
+
+  <section class="container-page grid gap-12 py-20 md:grid-cols-2 md:gap-16">
+    <div>
+      <h2 class="text-3xl">Opening hours</h2>
+      <div class="mt-5"><HoursTable /></div>
+      <p class="mt-5 text-ink/75">Supper club: {site.supperClub}</p>
+    </div>
+    <div id="booking" class="self-start rounded-3xl bg-sand p-8 sm:p-10">
+      <h2 class="text-3xl">Booking</h2>
+      <p class="mt-4 text-ink/80">
+        Breakfast and lunch are walk-in. We take bookings for groups of six or more and for the supper club; call or
+        email us and we’ll get back to you the same day.
+      </p>
+      <div class="mt-7 grid gap-2 sm:grid-cols-2">
+        <a href={`tel:${tel}`} class="btn btn-primary justify-center">Call {site.phone}</a>
+        <a href={`mailto:${site.email}?subject=Booking`} class="btn btn-outline justify-center text-tide">Email us</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page grid gap-12 md:grid-cols-[1fr_1.2fr] md:gap-16">
+    <div class="prose"><Content /></div>
+    <div class="self-start overflow-hidden rounded-3xl md:sticky md:top-28">
+      <HarbourMap class="w-full" />
+    </div>
+  </section>
+
+  <section class="container-page py-20 sm:py-28">
+    <h2 class="text-3xl">Questions people ask</h2>
+    <div class="mt-8 max-w-3xl divide-y divide-oat border-y border-oat">
+      {faq.map((item) => (
+        <details class="group py-5">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-6 font-display text-xl [&::-webkit-details-marker]:hidden">
+            {item.q}
+            <span class="text-2xl text-rust transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-3 max-w-2xl text-ink/80">{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-page">
+    <div class="aspect-[3/2] overflow-hidden rounded-3xl sm:aspect-[21/9]">
+      <Img name="storefront" sizes="(min-width: 72rem) 72rem, 100vw" class="size-full object-cover" />
+    </div>
+  </section>
+</Base>

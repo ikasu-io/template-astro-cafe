@@ -1,0 +1,94 @@
+---
+import Logo from './Logo.astro';
+import { getSite } from '../lib/site';
+
+const site = await getSite();
+const nav = [
+  { href: '/menu', label: 'Menu' },
+  { href: '/about', label: 'About' },
+  { href: '/events', label: 'Events' },
+  { href: '/journal', label: 'Journal' },
+  { href: '/visit', label: 'Visit' },
+];
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const current = (href: string) => path === href || path.startsWith(href + '/');
+---
+
+{site.notice && <p class="bg-rust px-4 py-2 text-center text-sm font-medium text-foam">{site.notice}</p>}
+
+<header class="sticky top-0 z-40 border-b border-oat/60 bg-foam/90 backdrop-blur-md">
+  <div class="container-page flex h-16 items-center justify-between gap-6">
+    <a href="/" class="text-tide" aria-label={`${site.name}, home`}><Logo /></a>
+
+    <nav aria-label="Main" class="hidden md:block">
+      <ul class="flex items-center gap-1">
+        {nav.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={current(item.href) ? 'page' : undefined}
+              class="rounded-full px-3.5 py-2 text-[0.95rem] font-medium text-ink/80 transition-colors hover:bg-sand hover:text-ink aria-[current=page]:text-tide aria-[current=page]:bg-sand"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+        <li class="ml-3"><a href="/visit#booking" class="btn btn-primary !py-2.5">Book a table</a></li>
+      </ul>
+    </nav>
+
+    <button
+      type="button"
+      popovertarget="mobile-nav"
+      class="-mr-2 inline-flex items-center gap-2 rounded-full px-3 py-2 font-medium text-ink md:hidden"
+    >
+      <svg class="size-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14" /></svg>
+      Menu
+    </button>
+  </div>
+</header>
+
+<div id="mobile-nav" popover class="mobile-nav">
+  <div class="flex h-16 items-center justify-between px-5">
+    <span class="text-tide"><Logo /></span>
+    <button type="button" popovertarget="mobile-nav" popovertargetaction="hide" class="-mr-2 rounded-full p-2" aria-label="Close menu">
+      <svg class="size-6" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" /></svg>
+    </button>
+  </div>
+  <nav aria-label="Main" class="px-5 pt-6">
+    <ul class="space-y-1">
+      <li><a href="/" class="block py-2 font-display text-4xl">Home</a></li>
+      {nav.map((item) => (
+        <li>
+          <a href={item.href} aria-current={current(item.href) ? 'page' : undefined} class="block py-2 font-display text-4xl aria-[current=page]:text-rust">
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <a href="/visit#booking" class="btn btn-primary mt-10 w-full justify-center">Book a table</a>
+    <p class="mt-8 text-sm text-ink/70">{site.address.street}, {site.address.town}<br />{site.phone}</p>
+  </nav>
+</div>
+
+<style>
+  .mobile-nav {
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background: var(--color-foam);
+    color: var(--color-ink);
+    opacity: 0;
+    transform: translateY(-0.5rem);
+    transition: opacity 0.2s, transform 0.2s, overlay 0.2s allow-discrete, display 0.2s allow-discrete;
+  }
+  .mobile-nav:popover-open { opacity: 1; transform: none; }
+  @starting-style {
+    .mobile-nav:popover-open { opacity: 0; transform: translateY(-0.5rem); }
+  }
+</style>

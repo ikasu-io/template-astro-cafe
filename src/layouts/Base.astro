@@ -1,0 +1,61 @@
+---
+import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { image } from '../lib/images';
+import { getSite } from '../lib/site';
+
+interface Props {
+  /** Page title; the café's name is added after it. Leave out on the home page. */
+  title?: string;
+  description?: string;
+  /** Image for link previews (social media, chat apps), by file name. */
+  image?: string;
+  /** Extra structured data for search engines (schema.org). */
+  jsonLd?: Record<string, unknown>;
+}
+
+const site = await getSite();
+const { title, description = site.description, image: imageName = 'hero-interior', jsonLd } = Astro.props;
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · Café and kitchen in ${site.address.town}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const og = await getImage({ src: image(imageName), width: 1200, format: 'jpg', quality: 75 });
+const ogUrl = new URL(og.src, Astro.site);
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} journal`} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <meta name="theme-color" content="#faf6ef" />
+    <link rel="preload" href="/fonts/fraunces-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title ?? site.name} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', ...jsonLd })} />}
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <a href="#main" class="sr-only z-50 rounded-full bg-tide px-4 py-2 text-foam focus:not-sr-only focus:fixed focus:top-3 focus:left-3">Skip to content</a>
+    <Header />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

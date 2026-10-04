@@ -1,0 +1,75 @@
+---
+// "Open now · until 16:00" / "Closed · opens tomorrow at 7:30", worked out
+// in the visitor's browser from the opening hours in src/data/site.yaml, in
+// the café's own time zone. Without JavaScript it simply stays hidden.
+import { getSite } from '../lib/site';
+
+interface Props { class?: string }
+const { class: className } = Astro.props;
+const site = await getSite();
+---
+
+<p
+  class:list={[
+    'open-badge inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-medium opacity-0 transition-opacity duration-300',
+    className,
+  ]}
+  data-open-badge
+  data-hours={JSON.stringify(site.hours)}
+  data-tz={site.timezone}
+>
+  <span class="dot size-2 rounded-full"></span>
+  <span data-text>&nbsp;</span>
+</p>
+
+<style>
+  .open-badge { background: color-mix(in oklab, var(--color-foam) 92%, transparent); color: var(--color-ink); }
+  .open-badge .dot { background: var(--color-oat); }
+  .open-badge[data-open='true'] .dot {
+    background: #3f8f5a;
+    box-shadow: 0 0 0 0 #3f8f5a;
+    animation: pulse 2.4s infinite;
+  }
+  @keyframes pulse {
+    70% { box-shadow: 0 0 0 6px transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .open-badge[data-open='true'] .dot { animation: none; }
+  }
+</style>
+
+<script>
+  type Day = { day: string; closed?: true; open?: string; close?: string };
+  const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const mins = (t: string) => +t.slice(0, 2) * 60 + +t.slice(3);
+  const fmt = (t: string) => t.replace(/^0/, '');
+
+  function status(hours: Day[], tz: string) {
+    const parts = new Intl.DateTimeFormat('en-GB', {
+      timeZone: tz, weekday: 'long', hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+    }).formatToParts(new Date());
+    const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
+    const today = DAYS.indexOf(get('weekday'));
+    const now = mins(`${get('hour')}:${get('minute')}`);
+    const on = (offset: number) => hours.find((h) => h.day === DAYS[(today + offset) % 7]);
+
+    const t = on(0);
+    if (t?.open && t.close) {
+      if (now >= mins(t.open) && now < mins(t.close)) return { open: true, text: `Open now · until ${fmt(t.close)}` };
+      if (now < mins(t.open)) return { open: false, text: `Closed · opens today at ${fmt(t.open)}` };
+    }
+    for (let i = 1; i <= 7; i++) {
+      const d = on(i);
+      if (d?.open) return { open: false, text: `Closed · opens ${i === 1 ? 'tomorrow' : d.day} at ${fmt(d.open)}` };
+    }
+    return { open: false, text: 'Closed' };
+  }
+
+  for (const el of document.querySelectorAll<HTMLElement>('[data-open-badge]')) {
+    const s = status(JSON.parse(el.dataset.hours!), el.dataset.tz!);
+    el.querySelector('[data-text]')!.textContent = s.text;
+    el.dataset.open = String(s.open);
+    el.classList.remove('opacity-0');
+  }
+</script>

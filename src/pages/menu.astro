@@ -1,0 +1,114 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Img from '../components/Img.astro';
+import { formatPrice, slugify } from '../lib/site';
+
+const sections = (await getCollection('menu')).sort((a, b) => a.id.localeCompare(b.id, 'en', { numeric: true }));
+const tagNames = { v: 'Vegetarian', vg: 'Vegan', gf: 'Gluten-free' } as const;
+// Vegan dishes are vegetarian too, so the "V" filter shows them as well.
+const filterTags = (tags: (keyof typeof tagNames)[]) => [...new Set(tags.flatMap((t) => (t === 'vg' ? ['vg', 'v'] : [t])))].join(' ');
+---
+
+<Base title="Menu" description="Breakfast, all-day plates, the bakery counter, coffee and drinks at Tern & Tide in Port Alder." image="brown-butter-eggs">
+  <header class="container-page pt-16 pb-10 sm:pt-24">
+    <p class="eyebrow">Menu</p>
+    <h1 class="mt-3 text-5xl sm:text-6xl">What we’re cooking</h1>
+    <p class="mt-5 max-w-2xl text-lg text-ink/80">
+      The menu follows the farm and the boats, so a few things change every week. Everything is made here, from the bread up.
+    </p>
+  </header>
+
+  <div class="sticky top-16 z-30 border-y border-oat/60 bg-foam/90 backdrop-blur-md">
+    <div class="container-page flex flex-col gap-2 py-3 text-sm md:flex-row md:items-center md:gap-6">
+      <nav aria-label="Menu sections" class="-mx-1 flex gap-4 overflow-x-auto px-1 whitespace-nowrap">
+        {sections.map((s) => <a href={`#${slugify(s.data.title)}`} class="font-medium text-ink/70 hover:text-tide">{s.data.title}</a>)}
+      </nav>
+      <div class="menu-filter hidden items-center gap-1.5 md:ml-auto" role="group" aria-label="Show only">
+        <span class="mr-1 text-ink/70">Show:</span>
+        <button type="button" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-filter="v" aria-pressed="false">V</button>
+        <button type="button" data-filter="vg" aria-pressed="false">VG</button>
+        <button type="button" data-filter="gf" aria-pressed="false">GF</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="menu" class="container-page space-y-20 py-16 sm:space-y-28 sm:py-20" data-filter="all">
+    {sections.map((section, i) => (
+      <section
+        id={slugify(section.data.title)}
+        class:list={[
+          'grid gap-10 lg:gap-16',
+          section.data.image && (i % 2 === 1 ? 'lg:grid-cols-[20rem_1fr]' : 'lg:grid-cols-[1fr_20rem]'),
+        ]}
+      >
+        <div>
+          <h2 class="text-4xl">{section.data.title}</h2>
+          {section.data.note && <p class="mt-2 text-ink/70">{section.data.note}</p>}
+          <ul class="mt-8 grid gap-x-12 gap-y-6 md:grid-cols-2">
+            {section.data.items.map((item) => (
+              <li class="dish" data-tags={filterTags(item.tags)}>
+                <div class="flex items-baseline gap-3">
+                  <h3 class:list={['font-display text-xl', item.soldOut && 'text-ink/70 line-through']}>{item.name}</h3>
+                  <span class="flex-1 translate-y-[-0.3em] border-b border-dotted border-ink/30" aria-hidden="true"></span>
+                  <span class="font-medium tabular-nums text-rust">{item.soldOut ? 'Sold out' : formatPrice(item.price)}</span>
+                </div>
+                {(item.description || item.tags.length > 0) && (
+                  <p class="mt-1 text-ink/70">
+                    {item.description}
+                    {item.tags.map((t) => (
+                      <abbr title={tagNames[t]} class="ml-1.5 inline-block rounded border border-oat px-1.5 text-[0.7rem] font-semibold tracking-wide text-tide no-underline">{t.toUpperCase()}</abbr>
+                    ))}
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+        {section.data.image && (
+          <div class:list={['hidden lg:block', i % 2 === 1 && 'lg:order-first']}>
+            <div class="sticky top-36 aspect-[4/5] overflow-hidden rounded-2xl">
+              <Img name={section.data.image} sizes="20rem" class="size-full object-cover" />
+            </div>
+          </div>
+        )}
+      </section>
+    ))}
+
+    <aside class="rounded-3xl bg-sand p-8 sm:p-10">
+      <h2 class="text-2xl">Allergies and dietary needs</h2>
+      <p class="mt-3 max-w-2xl text-ink/80">
+        V vegetarian · VG vegan · GF gluten-free. We cook everything in one small kitchen with nuts, gluten and dairy, so
+        please tell us about any allergy when you order and we’ll tell you exactly what’s in each dish.
+      </p>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .menu-filter button {
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+    font-weight: 600;
+    box-shadow: inset 0 0 0 1px var(--color-oat);
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .menu-filter button[aria-pressed='true'] { background: var(--color-tide); color: var(--color-foam); box-shadow: none; }
+  #menu[data-filter='v'] .dish:not([data-tags~='v']),
+  #menu[data-filter='vg'] .dish:not([data-tags~='vg']),
+  #menu[data-filter='gf'] .dish:not([data-tags~='gf']) { display: none; }
+</style>
+
+<script>
+  // The filter only works with JavaScript, so it stays hidden without it.
+  const menu = document.getElementById('menu')!;
+  const filter = document.querySelector<HTMLElement>('.menu-filter')!;
+  filter.classList.replace('hidden', 'flex');
+  filter.addEventListener('click', (e) => {
+    const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-filter]');
+    if (!button) return;
+    menu.dataset.filter = button.dataset.filter;
+    for (const b of filter.querySelectorAll('button')) b.setAttribute('aria-pressed', String(b === button));
+  });
+</script>

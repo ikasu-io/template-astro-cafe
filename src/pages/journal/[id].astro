@@ -1,0 +1,41 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Img from '../../components/Img.astro';
+import PostCard from '../../components/PostCard.astro';
+import { formatDate, getPosts } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('journal', (p) => !p.data.draft);
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+interface Props { post: CollectionEntry<'journal'> }
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, date, author, summary, image } = post.data;
+const more = (await getPosts()).filter((p) => p.id !== post.id).slice(0, 3);
+---
+
+<Base title={title} description={summary} image={image}>
+  <article>
+    <header class="container-page pt-12 sm:pt-16">
+      <a href="/journal" class="link text-sm font-medium">← Journal</a>
+      <h1 class="mt-8 max-w-4xl text-5xl leading-[1.05] sm:text-6xl">{title}</h1>
+      <p class="mt-5 text-ink/70"><time datetime={date.toISOString().slice(0, 10)}>{formatDate(date)}</time> · {author}</p>
+    </header>
+    <div class="container-page mt-10">
+      <div class="aspect-[3/2] overflow-hidden rounded-3xl sm:aspect-[21/9]">
+        <Img name={image} sizes="(min-width: 72rem) 72rem, 100vw" priority class="size-full object-cover" />
+      </div>
+    </div>
+    <div class="container-page py-14">
+      <div class="prose mx-auto"><Content /></div>
+    </div>
+  </article>
+
+  <section class="container-page border-t border-oat/70 pt-14">
+    <h2 class="text-3xl">More from the journal</h2>
+    <div class="mt-10 grid gap-10 md:grid-cols-3">{more.map((p) => <PostCard post={p} />)}</div>
+  </section>
+</Base>

@@ -1,0 +1,27 @@
+title: Bakery counter
+note: Baked here every morning from six. To eat in or take away.
+image: bakery-counter
+items:
+  - name: Cardamom bun
+    description: The one everyone asks about.
+    price: 3.80
+    tags: [v]
+  - name: Almond croissant
+    price: 3.90
+    tags: [v]
+  - name: Rhubarb and custard tart
+    price: 4.50
+    tags: [v]
+  - name: Olive oil and orange cake
+    price: 4.00
+    tags: [v, gf]
+  - name: Brown-butter blondie
+    price: 3.50
+    tags: [v]
+  - name: Sea-salt sourdough loaf
+    price: 5.50
+    tags: [vg]
+  - name: Seeded rye loaf
+    description: Fridays and Saturdays only.
+    price: 6.00
+    tags: [vg]

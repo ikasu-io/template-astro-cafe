@@ -1,0 +1,37 @@
+---
+import Logo from './Logo.astro';
+import { getSite, groupedHours } from '../lib/site';
+
+const site = await getSite();
+---
+
+<footer class="mt-24 bg-ink text-foam">
+  <div class="container-page grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
+    <div>
+      <a href="/" class="text-foam" aria-label={`${site.name}, home`}><Logo /></a>
+      <p class="mt-4 max-w-xs text-foam/70">{site.tagline}</p>
+    </div>
+    <div>
+      <h2 class="eyebrow !text-oat">Opening hours</h2>
+      <dl class="mt-4 space-y-1.5 text-foam/85">
+        {groupedHours(site.hours, true).map((g) => (
+          <div class="flex justify-between gap-4"><dt>{g.days}</dt><dd class="tabular-nums">{g.hours}</dd></div>
+        ))}
+      </dl>
+    </div>
+    <div>
+      <h2 class="eyebrow !text-oat">Find us</h2>
+      <address class="mt-4 space-y-1.5 not-italic text-foam/85">
+        <p>{site.address.street}<br />{site.address.town}</p>
+        <p><a class="hover:text-foam hover:underline" href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></p>
+        <p><a class="hover:text-foam hover:underline" href={`mailto:${site.email}`}>{site.email}</a></p>
+      </address>
+    </div>
+  </div>
+  <div class="border-t border-foam/15">
+    <div class="container-page flex flex-col gap-2 py-6 text-sm text-foam/75 sm:flex-row sm:justify-between">
+      <p>Fictional demo site — content and images generated with AI</p>
+      <p><a class="hover:text-foam hover:underline" href="/rss.xml">Journal RSS</a></p>
+    </div>
+  </div>
+</footer>

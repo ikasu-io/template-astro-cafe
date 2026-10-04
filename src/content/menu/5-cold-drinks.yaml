@@ -1,0 +1,6 @@
+title: Cold drinks, wine and cider
+items:
+  - { name: Fresh orange juice, price: 3.80, tags: [vg] }
+  - { name: Rhubarb soda, description: Made here., price: 3.50, tags: [vg] }
+  - { name: Alder Valley cider, price: 5.50, tags: [vg] }
+  - { name: Natural wine by the glass, description: Ask what’s open., price: 7.00, tags: [vg] }

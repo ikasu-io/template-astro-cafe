@@ -1,0 +1,18 @@
+# A description of every photo in src/assets/images/, read out by screen
+# readers and shown if the image cannot load. When you replace a photo,
+# update its line here too.
+hero-interior: { alt: "The café in the morning: wooden tables, an espresso machine on the counter and the harbour through the big windows" }
+storefront: { alt: "The sea-green front of Tern & Tide on the cobbled quay, with a bench, two stools and lobster pots outside" }
+cardamom-bun: { alt: "A twisted cardamom bun with pearl sugar next to a flat white on a marble counter" }
+brown-butter-eggs: { alt: "Soft scrambled eggs with chives on thick toasted sourdough, seen from above" }
+mackerel-plate: { alt: "Grilled mackerel on a fennel and orange salad with rye crispbread" }
+bakery-counter: { alt: "Trays of buns and rhubarb tarts on the bakery counter, with sourdough loaves on the shelf above" }
+baker-hands: { alt: "Floury hands shaping a round of sourdough on a wooden bench" }
+coffee-pour: { alt: "Steamed milk being poured into a flat white in a handmade cup" }
+harbour-dawn: { alt: "Port Alder harbour at dawn, with wooden day boats on still water" }
+day-boat-catch: { alt: "Fresh mackerel and a crab on ice in a blue fish crate on the quay" }
+supper-club: { alt: "Guests around the long candlelit supper club table, with roast squash, bread and wine" }
+summer-party: { alt: "Guests with drinks under string lights on the harbour quay" }
+rhubarb-tart: { alt: "A half-eaten rhubarb and custard tart on a speckled plate, with a fork and a cup of tea" }
+farm-vegetables: { alt: "Crates of squash, leeks, fennel and beetroot on a farm cart" }
+lantern-evening: { alt: "Candles and lanterns on the terrace tables at dusk, with people sitting outside and the harbour behind" }

@@ -1,0 +1,73 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Img from '../components/Img.astro';
+import { getSite } from '../lib/site';
+
+const site = await getSite();
+const page = (await getEntry('pages', 'about'))!;
+const { Content } = await render(page);
+const { title, description, image, suppliers = [], privateHire } = page.data;
+---
+
+<Base title={title} description={description} image={image}>
+  <header class="container-page grid items-end gap-10 pt-16 pb-14 sm:pt-24 md:grid-cols-[1fr_1fr]">
+    <div>
+      <p class="eyebrow">About</p>
+      <h1 class="mt-3 text-5xl leading-[1.05] sm:text-6xl">Two people, one oven, a window onto the harbour</h1>
+    </div>
+    <p class="text-lg text-ink/80 md:pb-2">{site.description}</p>
+  </header>
+
+  <div class="container-page">
+    <div class="aspect-[3/2] overflow-hidden rounded-3xl sm:aspect-[21/9]">
+      <Img name={image} sizes="(min-width: 72rem) 72rem, 100vw" priority class="size-full object-cover" />
+    </div>
+  </div>
+
+  <section class="container-page grid gap-12 py-20 sm:py-28 lg:grid-cols-[1fr_22rem] lg:gap-20">
+    <div class="prose"><Content /></div>
+    <div class="reveal hidden lg:block">
+      <div class="sticky top-28 aspect-[4/5] overflow-hidden rounded-2xl">
+        <Img name="baker-hands" sizes="22rem" class="size-full object-cover" />
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-sand py-20 sm:py-28">
+    <div class="container-page grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+      <div class="reveal">
+        <p class="eyebrow">Suppliers</p>
+        <h2 class="mt-3 text-4xl sm:text-5xl">Who we buy from</h2>
+        <div class="mt-8 aspect-[3/2] overflow-hidden rounded-2xl">
+          <Img name="farm-vegetables" sizes="(min-width: 1024px) 34rem, 100vw" class="size-full object-cover" />
+        </div>
+      </div>
+      <ul class="divide-y divide-oat self-center">
+        {suppliers.map((s) => (
+          <li class="reveal py-6 first:pt-0 last:pb-0">
+            <p class="eyebrow">{s.what}</p>
+            <h3 class="mt-1.5 text-2xl">{s.name}</h3>
+            <p class="mt-1.5 text-ink/75">{s.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {privateHire && (
+    <section class="container-page py-20 sm:py-28">
+      <div class="reveal grid overflow-hidden rounded-3xl bg-tide text-foam md:grid-cols-2">
+        <div class="aspect-[3/2] md:aspect-auto">
+          <Img name="supper-club" sizes="(min-width: 768px) 36rem, 100vw" class="size-full object-cover" />
+        </div>
+        <div class="p-8 sm:p-12">
+          <p class="eyebrow !text-sand">Private hire</p>
+          <h2 class="mt-3 text-4xl">Have the place to yourselves</h2>
+          <p class="mt-5 text-lg text-foam/85">{privateHire}</p>
+          <a href={`mailto:${site.email}?subject=Private%20hire`} class="btn btn-light mt-8">Email us about a date</a>
+        </div>
+      </div>
+    </section>
+  )}
+</Base>

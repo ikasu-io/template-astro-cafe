@@ -1,0 +1,36 @@
+---
+// A photo from src/assets/images/, by file name. Resized and converted to
+// WebP at build time; alt text comes from src/data/images.yaml.
+//
+// WebP only, not AVIF: every current browser reads WebP, and AVIF encoding
+// made a cold build ~7x slower (17 s vs 2.4 s locally, worse on 2 CPUs).
+import { Image } from 'astro:assets';
+import { getEntry } from 'astro:content';
+import { image } from '../lib/images';
+
+interface Props {
+  name: string;
+  sizes: string;
+  alt?: string;
+  class?: string;
+  priority?: boolean;
+}
+const { name, sizes, alt, class: className, priority = false } = Astro.props;
+const src = image(name);
+const altText = alt ?? (await getEntry('images', name))?.data.alt;
+if (altText === undefined) throw new Error(`No alt text for image "${name}" in src/data/images.yaml`);
+const widths = [480, 800, 1200, 1600].filter((w) => w <= src.width);
+---
+
+<Image
+  src={src}
+  alt={altText}
+  widths={widths.length ? widths : [src.width]}
+  sizes={sizes}
+  format="webp"
+  quality={70}
+  class={className}
+  loading={priority ? 'eager' : 'lazy'}
+  fetchpriority={priority ? 'high' : 'auto'}
+  decoding="async"
+/>

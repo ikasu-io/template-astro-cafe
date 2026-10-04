@@ -1,0 +1,10 @@
+---
+import Tern from './Tern.astro';
+interface Props { class?: string }
+const { class: className } = Astro.props;
+---
+
+<span class:list={['inline-flex items-center gap-2.5', className]}>
+  <Tern class="h-6 w-9 shrink-0" />
+  <span class="font-display text-[1.35rem] font-medium leading-none tracking-tight">Tern <span class="italic text-rust">&amp;</span> Tide</span>
+</span>

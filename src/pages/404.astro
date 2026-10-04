@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import Tern from '../components/Tern.astro';
+---
+
+<Base title="Page not found">
+  <section class="container-page flex flex-col items-start py-28 sm:py-40">
+    <Tern class="h-12 w-18 text-tide" />
+    <p class="eyebrow mt-8">404</p>
+    <h1 class="mt-3 text-5xl sm:text-6xl">This page went out with the tide.</h1>
+    <p class="mt-5 max-w-xl text-lg text-ink/80">It may have moved, or never existed. The menu, at least, is still where it was.</p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href="/" class="btn btn-primary">Back to the front page</a>
+      <a href="/menu" class="btn btn-outline text-tide">See the menu</a>
+    </div>
+  </section>
+</Base>

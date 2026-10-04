@@ -1,0 +1,34 @@
+# Content of the home page that is not taken from elsewhere: the hero, the
+# three signature dishes and the guest quotes. Images are file names from
+# src/assets/images/, without the extension.
+hero:
+  image: hero-interior
+  intro: >-
+    We open at half seven. The buns are usually gone by eleven.
+
+welcome:
+  title: A small kitchen with a big window onto the harbour
+  text: >-
+    Tern & Tide is a café on Quay Row, run by Maren and Teo since 2019. We
+    bake every morning, cook what the farm and the day boats bring in, and
+    pour coffee roasted three streets away. Come for breakfast, stay for
+    lunch, take a loaf home.
+
+signatures:
+  - name: Cardamom bun
+    description: Teo’s twisted bun with cardamom sugar. Baked at six, gone by eleven.
+    image: cardamom-bun
+  - name: Brown-butter eggs
+    description: Soft scrambled eggs on our sourdough, chives and smoked salt.
+    image: brown-butter-eggs
+  - name: Grilled mackerel
+    description: From the day boats, with fennel, orange and rye crispbread.
+    image: mackerel-plate
+
+quotes:
+  - text: The cardamom bun is worth the drive. Get there before eleven.
+    author: Hannah, a regular from up the valley
+  - text: Best fish finger sandwich on this coast, and they know it.
+    author: Owen, on the terrace with his dog
+  - text: We came for coffee and stayed until they put the chairs up.
+    author: Priya and Sam, visiting for the weekend

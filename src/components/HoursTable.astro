@@ -1,0 +1,38 @@
+---
+// All seven days, with today highlighted in the visitor's browser.
+import { dayHours, getSite } from '../lib/site';
+const site = await getSite();
+---
+
+<table class="hours w-full text-left" data-tz={site.timezone}>
+  <caption class="sr-only">Opening hours</caption>
+  <tbody>
+    {site.hours.map((d) => (
+      <tr data-day={d.day} class="border-b border-oat/70 last:border-0">
+        <th scope="row" class="py-2.5 pr-4 font-medium">{d.day}</th>
+        <td class:list={['py-2.5 text-right tabular-nums', 'closed' in d && 'text-ink/70']}>{dayHours(d)}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<style>
+  tr.today { color: var(--color-tide); font-weight: 600; }
+  tr.today th::after {
+    content: 'Today';
+    margin-left: 0.6rem;
+    border-radius: 999px;
+    background: var(--color-tide);
+    color: var(--color-foam);
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    vertical-align: 0.1rem;
+  }
+</style>
+
+<script>
+  for (const table of document.querySelectorAll<HTMLElement>('table.hours')) {
+    const day = new Intl.DateTimeFormat('en-GB', { timeZone: table.dataset.tz, weekday: 'long' }).format(new Date());
+    table.querySelector(`tr[data-day="${day}"]`)?.classList.add('today');
+  }
+</script>

@@ -1,0 +1,29 @@
+title: All-day plates
+note: From 11:30 until we close.
+image: mackerel-plate
+items:
+  - name: Grilled mackerel
+    description: Fennel and orange salad, rye crispbread.
+    price: 14.50
+  - name: Crab on toast
+    description: Brown butter, pickled cucumber.
+    price: 15.00
+  - name: Fish finger sandwich
+    description: Tartare sauce, little gem.
+    price: 13.00
+  - name: Roast squash
+    description: Labneh, dukkah, warm flatbread.
+    price: 12.00
+    tags: [v]
+  - name: Leek and Gruyère tart
+    description: Leaf salad.
+    price: 11.50
+    tags: [v]
+  - name: Spiced lentils
+    description: Herb yoghurt, crispy shallots.
+    price: 11.00
+    tags: [v, gf]
+  - name: Soup of the day
+    description: Ask at the counter. Always with sourdough.
+    price: 7.50
+    tags: [vg]

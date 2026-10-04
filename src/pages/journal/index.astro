@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPosts } from '../../lib/site';
+
+const [latest, ...rest] = await getPosts();
+---
+
+<Base title="Journal" description="News from Tern & Tide: new menus, our suppliers and life on the quay." image="day-boat-catch">
+  <header class="container-page pt-16 pb-12 sm:pt-24">
+    <p class="eyebrow">Journal</p>
+    <h1 class="mt-3 text-5xl sm:text-6xl">News from the quay</h1>
+    <p class="mt-5 max-w-2xl text-lg text-ink/80">New menus, the people we buy from, and whatever else is going on at number 14.</p>
+  </header>
+
+  <div class="container-page">
+    <h2 class="sr-only">All posts</h2>
+    {latest && <PostCard post={latest} sizes="(min-width: 72rem) 72rem, 100vw" />}
+    <div class="mt-20 grid gap-x-10 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
+      {rest.map((post) => <div class="reveal"><PostCard post={post} /></div>)}
+    </div>
+  </div>
+</Base>

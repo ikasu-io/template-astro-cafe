@@ -1,0 +1,20 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Img from './Img.astro';
+import { formatDate } from '../lib/site';
+
+interface Props { post: CollectionEntry<'journal'>; sizes?: string }
+const { post, sizes = '(min-width: 768px) 33vw, 100vw' } = Astro.props;
+const { title, date, author, summary, image } = post.data;
+---
+
+<article class="group relative">
+  <div class="aspect-[3/2] overflow-hidden rounded-2xl bg-sand">
+    <Img name={image} sizes={sizes} class="size-full object-cover transition-transform duration-500 group-hover:scale-105" />
+  </div>
+  <p class="mt-4 text-sm text-ink/70"><time datetime={date.toISOString().slice(0, 10)}>{formatDate(date)}</time> · {author}</p>
+  <h3 class="mt-1 text-2xl leading-snug">
+    <a href={`/journal/${post.id}`} class="after:absolute after:inset-0 group-hover:text-tide">{title}</a>
+  </h3>
+  <p class="mt-2 text-ink/75">{summary}</p>
+</article>

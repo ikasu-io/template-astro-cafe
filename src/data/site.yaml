@@ -1,0 +1,30 @@
+# Name, contact details and opening hours. Used on every page: the header,
+# the footer, the "Open now" badge, the Visit page and the search-engine data.
+name: Tern & Tide
+tagline: Coffee, bread and the day’s catch, on the quay since 2019.
+description: >-
+  A café and kitchen on the harbour in Port Alder. Breakfast, lunch, a
+  bakery counter and coffee by day; a supper club one Friday a month.
+
+address:
+  street: 14 Quay Row
+  town: Port Alder
+phone: "+44 1632 960418"
+email: hello@terntide.example
+
+# Times are local harbour time. A day with `closed: true` needs no times.
+timezone: Europe/London
+hours:
+  - { day: Monday, closed: true }
+  - { day: Tuesday, open: "07:30", close: "16:00" }
+  - { day: Wednesday, open: "07:30", close: "16:00" }
+  - { day: Thursday, open: "07:30", close: "16:00" }
+  - { day: Friday, open: "07:30", close: "16:00" }
+  - { day: Saturday, open: "08:00", close: "16:00" }
+  - { day: Sunday, open: "09:00", close: "15:00" }
+
+supperClub: One Friday a month, 19:00, booking only.
+
+# A short message shown in a bar at the top of every page, e.g. holiday
+# opening times. Leave empty to hide it.
+notice: ""

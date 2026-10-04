@@ -1,0 +1,29 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Img from './Img.astro';
+import { formatDate, formatTime } from '../lib/site';
+
+interface Props { event: CollectionEntry<'events'>; past?: boolean }
+const { event, past = false } = Astro.props;
+const { title, date, time, endTime, price, image, summary } = event.data;
+---
+
+<article class="group relative grid gap-5 sm:grid-cols-[11rem_1fr] sm:items-center">
+  <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-sand">
+    <Img name={image} sizes="(min-width: 640px) 11rem, 100vw" class="size-full object-cover transition-transform duration-500 group-hover:scale-105" />
+    <p class="absolute top-3 left-3 rounded-xl bg-foam px-3 py-1.5 text-center leading-tight shadow-sm">
+      <span class="block font-display text-2xl text-tide">{formatDate(date, { day: 'numeric' })}</span>
+      <span class="block text-[0.7rem] font-semibold tracking-widest text-ink/70 uppercase">{formatDate(date, { month: 'short' })}</span>
+    </p>
+  </div>
+  <div>
+    <p class="text-sm font-medium text-rust">
+      {formatDate(date, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })} · {formatTime(time)}{endTime && `–${formatTime(endTime)}`}
+    </p>
+    <h3 class="mt-1 text-2xl">
+      <a href={`/events/${event.id}`} class="after:absolute after:inset-0 group-hover:text-tide">{title}</a>
+    </h3>
+    <p class="mt-2 text-ink/75">{summary}</p>
+    <p class="mt-2 text-sm font-medium text-ink/70">{past ? 'Past event' : price}</p>
+  </div>
+</article>

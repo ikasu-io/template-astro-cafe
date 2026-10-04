@@ -1,0 +1,31 @@
+title: Breakfast
+note: Served until 11:30.
+image: brown-butter-eggs
+items:
+  - name: Brown-butter eggs
+    description: Soft scrambled eggs, sourdough, chives, smoked salt.
+    price: 9.00
+    tags: [v]
+  - name: Smoked haddock kedgeree
+    description: Rice, curry butter, soft egg, coriander.
+    price: 12.50
+    tags: [gf]
+  - name: The harbour fry
+    description: Alder Valley bacon and sausage, eggs, beans, mushrooms, sourdough.
+    price: 14.00
+  - name: Buttermilk pancakes
+    description: Blackberries, honey butter.
+    price: 10.00
+    tags: [v]
+  - name: Crushed peas and feta on toast
+    description: Mint, chilli, lemon.
+    price: 9.50
+    tags: [v]
+  - name: Cardamom porridge
+    description: Oats cooked in oat milk, poached quince, toasted hazelnuts.
+    price: 7.50
+    tags: [vg]
+  - name: Granola and yoghurt
+    description: Gull Rock yoghurt, rhubarb compote.
+    price: 6.50
+    tags: [v]
