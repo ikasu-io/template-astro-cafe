@@ -17,3 +17,10 @@ them as AI-generated.
 
 The favicon, the tern logo and the harbour map are SVG drawings made for
 this site, under the same licence.
+
+## Video
+
+The home page's background video, `public/videos/hero.mp4`, is a slow zoom
+over `hero-interior` made with ffmpeg: 4 seconds, 640×360, no sound, H.264.
+Its poster, `hero-poster.jpg`, is the first frame. Same licence as the
+photos.

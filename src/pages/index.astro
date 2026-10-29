@@ -20,6 +20,20 @@ const posts = (await getPosts()).slice(0, 2);
   <!-- Hero -->
   <section class="relative isolate flex min-h-[86svh] items-end overflow-hidden text-foam">
     <Img name={home.hero.image} sizes="100vw" priority class="absolute inset-0 -z-10 size-full object-cover" />
+    <video src="/videos/hero.mp4" poster="/videos/hero-poster.jpg"
+           autoplay muted loop playsinline aria-hidden="true"
+           class="absolute inset-0 -z-10 size-full object-cover"></video>
+    <script is:inline>
+      // Runs as soon as the video above is parsed: anyone who prefers
+      // reduced motion gets the poster only. Autoplay is switched off and
+      // the download the browser has already started is stopped.
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const video = document.currentScript.previousElementSibling;
+        video.removeAttribute('autoplay');
+        video.preload = 'none';
+        video.load();
+      }
+    </script>
     <div class="absolute inset-0 -z-10 bg-gradient-to-t from-ink/90 via-ink/50 to-ink/10"></div>
     <div class="container-page pt-32 pb-14 sm:pb-20">
       <OpenBadge />
