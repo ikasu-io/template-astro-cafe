@@ -2,7 +2,8 @@
 
 > **Tern & Tide is a fictional café.** The town of Port Alder, the people,
 > the menu, the events and the photos are all made up. The site, its
-> content and its images were generated with AI, and it is maintained with
+> content, its images and its videos were generated with AI, and it is
+> maintained with
 > [Ikasu](https://ikasu.io), an AI content copilot for static sites.
 > Use it as a starting point for your own café, restaurant or bakery.
 
@@ -56,6 +57,14 @@ Content files refer to photos by file name without the extension
 name into `src/assets/images/` (JPEG, PNG or WebP, ideally no wider than
 1600 px) and update its description in `src/data/images.yaml`. To add
 one, add the file and a line in `src/data/images.yaml`.
+
+## Using this for a real site
+
+The images and videos look real but were generated with AI, and the
+notice in the footer is what labels them. If you publish a real site with
+them and remove that notice, you may have to label them yourself, for
+example under Article 50 of the EU AI Act. Replacing them with your own
+avoids the question.
 
 ## Licence
 
