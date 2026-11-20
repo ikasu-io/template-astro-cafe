@@ -19,23 +19,29 @@ const more = (await getPosts()).filter((p) => p.id !== post.id).slice(0, 3);
 
 <Base title={title} description={summary} image={image}>
   <article>
-    <header class="container-page pt-12 sm:pt-16">
-      <a href="/journal" class="link text-sm font-medium">← Journal</a>
-      <h1 class="mt-8 max-w-4xl text-5xl leading-[1.05] sm:text-6xl">{title}</h1>
-      <p class="mt-5 text-ink/70"><time datetime={date.toISOString().slice(0, 10)}>{formatDate(date)}</time> · {author}</p>
+    <header class="container-page pt-14 sm:pt-20">
+      <a href="/journal" class="back-link">Journal</a>
+      <div class="mx-auto mt-10 max-w-4xl text-center">
+        <p class="text-xs font-semibold tracking-[0.14em] text-ink/70 uppercase"><time datetime={date.toISOString().slice(0, 10)}>{formatDate(date)}</time> · {author}</p>
+        <h1 class="page-title mt-6">{title}</h1>
+        <p class="mx-auto mt-6 max-w-2xl text-lg text-ink/75">{summary}</p>
+      </div>
     </header>
-    <div class="container-page mt-10">
-      <div class="aspect-[3/2] overflow-hidden rounded-3xl sm:aspect-[21/9]">
-        <Img name={image} sizes="(min-width: 72rem) 72rem, 100vw" priority class="size-full object-cover" />
+    <div class="container-page mt-12 sm:mt-16">
+      <div class="aspect-[3/2] overflow-hidden rounded-[2px] sm:aspect-[21/9]">
+        <Img name={image} sizes="(min-width: 90rem) 84rem, 100vw" priority class="size-full object-cover" />
       </div>
     </div>
-    <div class="container-page py-14">
+    <div class="container-page py-16 sm:py-24">
       <div class="prose mx-auto"><Content /></div>
     </div>
   </article>
 
-  <section class="container-page border-t border-oat/70 pt-14">
-    <h2 class="text-3xl">More from the journal</h2>
-    <div class="mt-10 grid gap-10 md:grid-cols-3">{more.map((p) => <PostCard post={p} />)}</div>
+  <section class="container-page">
+    <div class="border-t border-ink/15 pt-14">
+      <p class="eyebrow">Keep reading</p>
+      <h2 class="section-title mt-5">More from <em>the journal</em></h2>
+    </div>
+    <div class="mt-12 grid gap-x-8 gap-y-14 md:grid-cols-3">{more.map((p) => <PostCard post={p} />)}</div>
   </section>
 </Base>

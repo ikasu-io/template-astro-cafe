@@ -40,7 +40,7 @@ touch a component to change the content.
 | **Events**: add one, change a date | `src/content/events/*.md` — one file per event |
 | **Journal posts** | `src/content/journal/*.md` — one file per post; `draft: true` hides one |
 | About and Visit pages, suppliers, FAQ | `src/content/pages/about.md`, `src/content/pages/visit.md` |
-| Home page hero, signature dishes, guest quotes | `src/data/home.yaml` |
+| Home page hero, welcome sentence (with photos between the words), signature dishes, the moving band, guest quotes | `src/data/home.yaml` |
 | **Photos** | `src/assets/images/` — see below |
 | Colours and fonts | the `@theme` block at the top of `src/styles/global.css` |
 | Your domain (for links in search results and social previews) | `site` in `astro.config.mjs` |

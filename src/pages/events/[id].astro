@@ -20,30 +20,34 @@ const isPast = date < new Date(new Date().toISOString().slice(0, 10));
 
 <Base title={title} description={summary} image={image} jsonLd={eventJsonLd(event, site, Astro.site!)}>
   <article>
-    <header class="container-page pt-12 sm:pt-16">
-      <a href="/events" class="link text-sm font-medium">← All events</a>
-      <p class="eyebrow mt-8">{isPast ? 'Past event' : 'Event'}</p>
-      <h1 class="mt-3 max-w-3xl text-5xl leading-[1.05] sm:text-6xl">{title}</h1>
-      <p class="mt-5 max-w-2xl text-lg text-ink/80">{summary}</p>
+    <header class="container-page pt-14 sm:pt-20">
+      <a href="/events" class="back-link">All events</a>
+      <div class="mt-10 grid gap-8 border-b border-ink/15 pb-12 md:grid-cols-12 md:items-end md:gap-8">
+        <div class="md:col-span-8">
+          <p class="eyebrow">{isPast ? 'Past event' : formatDate(date, { weekday: 'long', day: 'numeric', month: 'long' })}</p>
+          <h1 class="page-title mt-6">{title}</h1>
+        </div>
+        <p class="text-lg text-ink/80 md:col-span-4">{summary}</p>
+      </div>
     </header>
 
-    <div class="container-page mt-10">
-      <div class="aspect-[3/2] overflow-hidden rounded-3xl sm:aspect-[21/9]">
-        <Img name={image} sizes="(min-width: 72rem) 72rem, 100vw" priority class="size-full object-cover" />
+    <div class="container-page mt-10 sm:mt-14">
+      <div class="aspect-[3/2] overflow-hidden rounded-[2px] sm:aspect-[21/9]">
+        <Img name={image} sizes="(min-width: 90rem) 84rem, 100vw" priority class="size-full object-cover" />
       </div>
     </div>
 
-    <div class="container-page grid gap-12 py-14 lg:grid-cols-[1fr_20rem] lg:gap-20">
-      <div class="prose"><Content /></div>
-      <aside class="self-start rounded-3xl bg-sand p-7 lg:sticky lg:top-28">
-        <dl class="space-y-4">
-          <div><dt class="eyebrow">Date</dt><dd class="mt-1 text-lg">{formatDate(date, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</dd></div>
-          <div><dt class="eyebrow">Time</dt><dd class="mt-1 text-lg">{formatTime(time)}{endTime && ` – ${formatTime(endTime)}`}</dd></div>
-          <div><dt class="eyebrow">Price</dt><dd class="mt-1 text-lg">{price}</dd></div>
-          <div><dt class="eyebrow">Where</dt><dd class="mt-1 text-lg">{site.name}, {site.address.street}</dd></div>
+    <div class="container-page grid gap-12 py-16 sm:py-24 lg:grid-cols-12 lg:gap-8">
+      <div class="prose lg:col-span-7"><Content /></div>
+      <aside class="grain self-start bg-sand p-8 lg:sticky lg:top-28 lg:col-span-4 lg:col-start-9">
+        <dl class="divide-y divide-ink/15">
+          <div class="py-4 first:pt-0"><dt class="eyebrow">Date</dt><dd class="mt-1 text-lg">{formatDate(date, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</dd></div>
+          <div class="py-4 first:pt-0"><dt class="eyebrow">Time</dt><dd class="mt-1 text-lg">{formatTime(time)}{endTime && ` – ${formatTime(endTime)}`}</dd></div>
+          <div class="py-4 first:pt-0"><dt class="eyebrow">Price</dt><dd class="mt-1 text-lg">{price}</dd></div>
+          <div class="py-4 first:pt-0"><dt class="eyebrow">Where</dt><dd class="mt-1 text-lg">{site.name}, {site.address.street}</dd></div>
         </dl>
         {!isPast && (
-          <div class="mt-7 grid gap-2">
+          <div class="mt-6 grid gap-2">
             <a href={`tel:${site.phone.replace(/\s/g, '')}`} class="btn btn-primary justify-center">Call {site.phone}</a>
             <a href={`mailto:${site.email}?subject=${encodeURIComponent(title)}`} class="btn btn-outline justify-center text-tide">Email to book</a>
           </div>

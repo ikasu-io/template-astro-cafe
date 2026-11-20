@@ -1,5 +1,6 @@
 # Content of the home page that is not taken from elsewhere: the hero, the
-# three signature dishes and the guest quotes. Images are file names from
+# welcome, the three signature dishes (their prices come from the menu), the
+# words in the moving band and the guest quotes. Images are file names from
 # src/assets/images/, without the extension.
 hero:
   image: hero-interior
@@ -7,7 +8,11 @@ hero:
     We open at half seven. The buns are usually gone by eleven.
 
 welcome:
-  title: A small kitchen with a big window onto the harbour
+  # The big sentence. A photo name in curly brackets, like {coffee-pour},
+  # shows that photo as a small picture between the words.
+  title: >-
+    A small kitchen {baker-hands} with a big window onto the harbour
+    {harbour-dawn} and coffee roasted three streets away {coffee-pour}
   text: >-
     Tern & Tide is a café on Quay Row, run by Maren and Teo since 2019. We
     bake every morning, cook what the farm and the day boats bring in, and
@@ -24,6 +29,15 @@ signatures:
   - name: Grilled mackerel
     description: From the day boats, with fennel, orange and rye crispbread.
     image: mackerel-plate
+
+# The slow moving band between the dishes and the quotes.
+marquee:
+  - Cardamom buns
+  - Sourdough
+  - Day-boat fish
+  - Flat whites
+  - Rhubarb tart
+  - Supper club
 
 quotes:
   - text: The cardamom bun is worth the drive. Get there before eleven.

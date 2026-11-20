@@ -14,10 +14,14 @@ interface Props {
   image?: string;
   /** Extra structured data for search engines (schema.org). */
   jsonLd?: Record<string, unknown>;
+  /** The header lies over the page's first section (a full-bleed hero). */
+  overlayHeader?: boolean;
+  /** The footer follows the last section without a gap. */
+  flushFooter?: boolean;
 }
 
 const site = await getSite();
-const { title, description = site.description, image: imageName = 'hero-interior', jsonLd } = Astro.props;
+const { title, description = site.description, image: imageName = 'hero-interior', jsonLd, overlayHeader = false, flushFooter = false } = Astro.props;
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · Café and kitchen in ${site.address.town}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const og = await getImage({ src: image(imageName), width: 1200, format: 'jpg', quality: 75 });
@@ -52,10 +56,10 @@ const ogUrl = new URL(og.src, Astro.site);
   </head>
   <body class="flex min-h-dvh flex-col">
     <a href="#main" class="sr-only z-50 rounded-full bg-tide px-4 py-2 text-foam focus:not-sr-only focus:fixed focus:top-3 focus:left-3">Skip to content</a>
-    <Header />
+    <Header overlay={overlayHeader} />
     <main id="main" class="flex-1">
       <slot />
     </main>
-    <Footer />
+    <Footer flush={flushFooter} />
   </body>
 </html>

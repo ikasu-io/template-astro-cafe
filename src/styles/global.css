@@ -66,12 +66,13 @@
   }
 }
 
+/* The page frame. Header, footer and content share it. */
 @utility container-page {
   width: 100%;
-  max-width: 72rem;
+  max-width: 90rem;
   margin-inline: auto;
   padding-inline: 1.25rem;
-  @media (width >= 40rem) { padding-inline: 2rem; }
+  @media (width >= 40rem) { padding-inline: 3rem; }
 }
 
 @utility link {
@@ -90,6 +91,14 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-rust);
+  & .num {
+    display: inline-block;
+    margin-right: 0.9rem;
+    padding-right: 0.9rem;
+    border-right: 1px solid currentColor;
+    color: var(--color-ink);
+    opacity: 0.75;
+  }
 }
 
 @layer components {
@@ -144,12 +153,119 @@
   }
 }
 
+/* Home page pieces ------------------------------------------------------- */
+
+/* The name in the hero and the footer. */
+.wordmark {
+  font-family: var(--font-display);
+  font-size: clamp(3.25rem, 9vw, 8.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+  white-space: nowrap;
+  margin: 0.25em 0 0.2em -0.03em;
+}
+
+/* Title of an inner page. */
+.page-title {
+  font-size: clamp(2.5rem, 4.4vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+}
+
+/* "← Journal": the way back up from a single post or event. */
+.back-link {
+  display: inline-flex;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-ink) 75%, transparent);
+}
+.back-link::before { content: "←"; transition: transform 0.3s; }
+.back-link:hover { color: var(--color-tide); }
+.back-link:hover::before { transform: translateX(-0.3rem); }
+
+/* Headline sizes, italics in the brand colour. */
+.section-title {
+  font-size: clamp(2.1rem, 3.6vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+}
+.section-title em, .statement em, .page-title em { color: var(--color-tide); }
+
+/* The welcome sentence with small photos between the words. */
+.statement {
+  font-size: clamp(1.75rem, 3vw, 2.9rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+  max-width: 24em;
+}
+.statement-photo {
+  display: inline-block;
+  width: 2em;
+  height: 0.9em;
+  margin: 0 0.1em;
+  vertical-align: -0.1em;
+  overflow: hidden;
+  border-radius: 999px;
+}
+
+/* Link with an arrow that moves on hover. */
+.arrow-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.35rem;
+}
+.arrow-link::after { content: "→"; transition: transform 0.3s; }
+.arrow-link:hover { color: var(--color-tide); }
+.arrow-link:hover::after { transform: translateX(0.3rem); }
+
+.dish-img { transition: transform 0.9s cubic-bezier(.2,.7,.2,1); }
+.dish:hover .dish-img { transform: scale(1.04); }
+.event-row { transition: background-color 0.3s; }
+.event-row:hover { background: color-mix(in oklab, var(--color-sand) 60%, transparent); }
+
+/* A fine paper grain over the sand sections, drawn by the browser. */
+.grain { position: relative; isolation: isolate; }
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .45 0 0 0 0 .3 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The moving band: two copies of the list side by side, shifted by one. */
+.marquee { display: flex; overflow: hidden; white-space: nowrap; }
+.marquee-track { display: flex; flex-shrink: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .marquee-track { animation: marquee 40s linear infinite; }
+  .hero-rise { animation: rise 1.1s cubic-bezier(.2,.7,.2,1) both; }
+  .hero-rise:nth-child(2) { animation-delay: 0.12s; }
+  .hero-rise:nth-child(3) { animation-delay: 0.24s; }
+}
+@keyframes marquee { to { transform: translateX(-100%); } }
+@keyframes rise { from { opacity: 0; transform: translateY(2rem); } }
+
 /* Sections fade up as they scroll into view. CSS scroll-driven animation,
    so no JavaScript; off for anyone who prefers reduced motion. */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
-    .reveal {
-      animation: reveal linear both;
+    .reveal { animation: reveal linear both; }
+    /* A rule of its own: the CSS minifier would otherwise fold the timeline
+       into the animation shorthand, which browsers then reject. */
+    html .reveal {
       animation-timeline: view();
       animation-range: entry 0% entry 40%;
     }

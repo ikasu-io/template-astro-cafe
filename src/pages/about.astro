@@ -2,6 +2,7 @@
 import { getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Img from '../components/Img.astro';
+import PageHeader from '../components/PageHeader.astro';
 import { getSite } from '../lib/site';
 
 const site = await getSite();
@@ -10,63 +11,61 @@ const { Content } = await render(page);
 const { title, description, image, suppliers = [], privateHire } = page.data;
 ---
 
-<Base title={title} description={description} image={image}>
-  <header class="container-page grid items-end gap-10 pt-16 pb-14 sm:pt-24 md:grid-cols-[1fr_1fr]">
-    <div>
-      <p class="eyebrow">About</p>
-      <h1 class="mt-3 text-5xl leading-[1.05] sm:text-6xl">Two people, one oven, a window onto the harbour</h1>
-    </div>
-    <p class="text-lg text-ink/80 md:pb-2">{site.description}</p>
-  </header>
+<Base title={title} description={description} image={image} flushFooter={!!privateHire}>
+  <PageHeader eyebrow="About" title="Two people, one oven, a window onto the harbour">
+    {site.description}
+  </PageHeader>
 
-  <div class="container-page">
-    <div class="aspect-[3/2] overflow-hidden rounded-3xl sm:aspect-[21/9]">
-      <Img name={image} sizes="(min-width: 72rem) 72rem, 100vw" priority class="size-full object-cover" />
+  <div class="container-page pt-10 sm:pt-14">
+    <div class="aspect-[3/2] overflow-hidden rounded-[2px] sm:aspect-[21/9]">
+      <Img name={image} sizes="(min-width: 90rem) 84rem, 100vw" priority class="size-full object-cover" />
     </div>
   </div>
 
-  <section class="container-page grid gap-12 py-20 sm:py-28 lg:grid-cols-[1fr_22rem] lg:gap-20">
-    <div class="prose"><Content /></div>
-    <div class="reveal hidden lg:block">
-      <div class="sticky top-28 aspect-[4/5] overflow-hidden rounded-2xl">
+  <section class="container-page grid gap-12 py-20 sm:py-28 lg:grid-cols-12 lg:gap-8">
+    <p class="eyebrow lg:col-span-3"><span class="num">01</span>Our story</p>
+    <div class="prose lg:col-span-5"><Content /></div>
+    <div class="reveal hidden lg:col-span-3 lg:col-start-10 lg:block">
+      <div class="sticky top-28 aspect-[4/5] overflow-hidden rounded-[2px]">
         <Img name="baker-hands" sizes="22rem" class="size-full object-cover" />
       </div>
     </div>
   </section>
 
-  <section class="bg-sand py-20 sm:py-28">
-    <div class="container-page grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
-      <div class="reveal">
-        <p class="eyebrow">Suppliers</p>
-        <h2 class="mt-3 text-4xl sm:text-5xl">Who we buy from</h2>
-        <div class="mt-8 aspect-[3/2] overflow-hidden rounded-2xl">
+  <section class="grain bg-sand py-20 sm:py-28">
+    <div class="container-page grid gap-12 lg:grid-cols-12 lg:gap-8">
+      <div class="reveal lg:col-span-5">
+        <p class="eyebrow"><span class="num">02</span>Suppliers</p>
+        <h2 class="section-title mt-6">Who we <em>buy from</em></h2>
+        <div class="mt-10 aspect-[4/3] overflow-hidden rounded-[2px]">
           <Img name="farm-vegetables" sizes="(min-width: 1024px) 34rem, 100vw" class="size-full object-cover" />
         </div>
       </div>
-      <ul class="divide-y divide-oat self-center">
-        {suppliers.map((s) => (
-          <li class="reveal py-6 first:pt-0 last:pb-0">
-            <p class="eyebrow">{s.what}</p>
-            <h3 class="mt-1.5 text-2xl">{s.name}</h3>
-            <p class="mt-1.5 text-ink/75">{s.text}</p>
+      <ol class="self-end border-t border-ink/15 lg:col-span-6 lg:col-start-7">
+        {suppliers.map((s, i) => (
+          <li class="reveal grid grid-cols-[2.5rem_1fr] gap-x-4 border-b border-ink/15 py-7">
+            <span class="pt-1.5 text-xs font-semibold tracking-widest text-rust">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3 class="text-2xl">{s.name}</h3>
+              <p class="mt-1 text-xs font-semibold tracking-[0.14em] text-ink/70 uppercase">{s.what}</p>
+              <p class="mt-3 text-ink/75">{s.text}</p>
+            </div>
           </li>
         ))}
-      </ul>
+      </ol>
     </div>
   </section>
 
   {privateHire && (
-    <section class="container-page py-20 sm:py-28">
-      <div class="reveal grid overflow-hidden rounded-3xl bg-tide text-foam md:grid-cols-2">
-        <div class="aspect-[3/2] md:aspect-auto">
-          <Img name="supper-club" sizes="(min-width: 768px) 36rem, 100vw" class="size-full object-cover" />
-        </div>
-        <div class="p-8 sm:p-12">
-          <p class="eyebrow !text-sand">Private hire</p>
-          <h2 class="mt-3 text-4xl">Have the place to yourselves</h2>
-          <p class="mt-5 text-lg text-foam/85">{privateHire}</p>
-          <a href={`mailto:${site.email}?subject=Private%20hire`} class="btn btn-light mt-8">Email us about a date</a>
-        </div>
+    <section class="grid bg-tide-dark text-foam md:grid-cols-2">
+      <div class="relative min-h-[50svh]">
+        <Img name="supper-club" sizes="(min-width: 768px) 50vw, 100vw" class="absolute inset-0 size-full object-cover" />
+      </div>
+      <div class="reveal px-5 py-20 sm:px-12 sm:py-28 lg:px-20">
+        <p class="eyebrow !text-oat"><span class="num !text-foam/60">03</span>Private hire</p>
+        <h2 class="section-title mt-6">Have the place <em class="!text-oat">to yourselves</em></h2>
+        <p class="mt-6 max-w-lg text-lg text-foam/85">{privateHire}</p>
+        <a href={`mailto:${site.email}?subject=Private%20hire`} class="btn btn-light mt-10">Email us about a date</a>
       </div>
     </section>
   )}

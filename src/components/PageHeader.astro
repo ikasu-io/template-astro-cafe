@@ -1,0 +1,24 @@
+---
+// The top of every inner page: a small label, the title, and an intro
+// beside it (the default slot), above a fine line.
+interface Props {
+  eyebrow: string;
+  title: string;
+  /** A link back up, e.g. { href: '/journal', label: 'Journal' }. */
+  back?: { href: string; label: string };
+}
+const { eyebrow, title, back } = Astro.props;
+---
+
+<header class="container-page pt-14 sm:pt-20">
+  {back && <a href={back.href} class="back-link">{back.label}</a>}
+  <div class:list={['grid gap-8 border-b border-ink/15 pb-12 md:grid-cols-12 md:items-end md:gap-8 sm:pb-16', back && 'mt-10']}>
+    <div class="md:col-span-7">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1 class="page-title mt-6">{title}</h1>
+    </div>
+    {Astro.slots.has('default') && (
+      <div class="text-lg leading-relaxed text-ink/80 md:col-span-4 md:col-start-9"><slot /></div>
+    )}
+  </div>
+</header>

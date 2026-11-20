@@ -41,6 +41,7 @@ const home = defineCollection({
     hero: z.object({ image: z.string(), intro: z.string() }),
     welcome: z.object({ title: z.string(), text: z.string() }),
     signatures: z.array(z.object({ name: z.string(), description: z.string(), image: z.string() })),
+    marquee: z.array(z.string()).min(1),
     quotes: z.array(z.object({ text: z.string(), author: z.string() })),
   }),
 });

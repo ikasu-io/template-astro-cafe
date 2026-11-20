@@ -2,36 +2,62 @@
 import Logo from './Logo.astro';
 import { getSite, groupedHours } from '../lib/site';
 
+interface Props {
+  /** No gap above: the page's last section runs into the footer. */
+  flush?: boolean;
+}
+const { flush = false } = Astro.props;
 const site = await getSite();
+const nav = [
+  { href: '/menu', label: 'Menu' },
+  { href: '/about', label: 'About' },
+  { href: '/events', label: 'Events' },
+  { href: '/journal', label: 'Journal' },
+  { href: '/visit', label: 'Visit' },
+];
 ---
 
-<footer class="mt-24 bg-ink text-foam">
-  <div class="container-page grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
-    <div>
-      <a href="/" class="text-foam" aria-label={`${site.name}, home`}><Logo /></a>
-      <p class="mt-4 max-w-xs text-foam/70">{site.tagline}</p>
+<footer class:list={['overflow-hidden bg-ink text-foam', !flush && 'mt-24']}>
+  <div class="container-page grid gap-12 pt-20 pb-16 md:grid-cols-12 md:gap-8">
+    <div class="md:col-span-5">
+      <p class="font-display text-3xl leading-tight sm:text-4xl">Come for breakfast,<br /><em class="text-oat">stay for lunch.</em></p>
+      <a href="/visit#booking" class="btn btn-light mt-8">Book a table</a>
     </div>
-    <div>
+    <div class="md:col-span-2 md:col-start-7">
+      <h2 class="eyebrow !text-oat">Pages</h2>
+      <ul class="mt-4 space-y-1.5 text-foam/85">
+        {nav.map((item) => <li><a class="hover:text-foam hover:underline" href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </div>
+    <div class="md:col-span-2">
       <h2 class="eyebrow !text-oat">Opening hours</h2>
       <dl class="mt-4 space-y-1.5 text-foam/85">
         {groupedHours(site.hours, true).map((g) => (
-          <div class="flex justify-between gap-4"><dt>{g.days}</dt><dd class="tabular-nums">{g.hours}</dd></div>
+          <div><dt class="text-foam/60 text-sm">{g.days}</dt><dd class="tabular-nums">{g.hours}</dd></div>
         ))}
       </dl>
     </div>
-    <div>
+    <div class="md:col-span-2">
       <h2 class="eyebrow !text-oat">Find us</h2>
       <address class="mt-4 space-y-1.5 not-italic text-foam/85">
         <p>{site.address.street}<br />{site.address.town}</p>
         <p><a class="hover:text-foam hover:underline" href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></p>
-        <p><a class="hover:text-foam hover:underline" href={`mailto:${site.email}`}>{site.email}</a></p>
+        <p><a class="break-all hover:text-foam hover:underline" href={`mailto:${site.email}`}>{site.email}</a></p>
       </address>
     </div>
   </div>
+  <div class="container-page" aria-hidden="true">
+    <p class="wordmark footer-mark">Tern <span class="italic text-rust">&amp;</span> Tide</p>
+  </div>
   <div class="border-t border-foam/15">
-    <div class="container-page flex flex-col gap-2 py-6 text-sm text-foam/75 sm:flex-row sm:justify-between">
+    <div class="container-page flex flex-col gap-2 py-6 text-sm text-foam/75 sm:flex-row sm:items-center sm:justify-between">
+      <a href="/" class="text-foam" aria-label={`${site.name}, home`}><Logo /></a>
       <p>Fictional demo site — content, images and videos generated with AI</p>
       <p><a class="hover:text-foam hover:underline" href="/rss.xml">Journal RSS</a></p>
     </div>
   </div>
 </footer>
+
+<style>
+  .footer-mark { margin: 0 0 0.15em; color: color-mix(in oklab, var(--color-foam) 90%, transparent); }
+</style>
